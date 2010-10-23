@@ -4,6 +4,7 @@
   <title><%= title %></title>
   <link rel="stylesheet" href="/css/master.css" type="text/css" media="screen" title="no title" charset="utf-8">
   <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf-8" src="/js/jquery.highlight.js"></script>
   <% yield_content :head %>
 </head>
 <body>
@@ -15,6 +16,7 @@
       <div id="primary">
         <%= yield %>
       </div>
+      <div id="status" class="rounded"></div>
     </div>
     
   </div>

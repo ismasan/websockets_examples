@@ -1,0 +1,56 @@
+<% content_for :head do %>
+  <script type="text/javascript" charset="utf-8">
+    $(function(){
+      
+      var socket = new WebSocket('ws://localhost:8080');
+      
+      $('#status').text('connecting...');
+      
+      // Listen to socket messages
+      
+      socket.onopen = function() {
+        $('#status').removeClass('disconnected').addClass('connected').text('connected');
+      }
+      
+      socket.onclose = function() {
+        $('#status').removeClass('connected').addClass('disconnected').text('disconnected');
+      }
+      
+      socket.onmessage = function( evt ) {
+        var li = $('<li>')
+          .text(evt.data)
+          .appendTo('#messages');
+          
+        $('#messages').attr('scrollTop', $('#messages').attr('scrollHeight'));
+        
+        li.highlightFade({start: '#0D4512', end: '#000000'});
+      }
+      
+      // Send messages to socket
+      $('#post').submit(function () {
+        var field = $(this).find('[name=message]'),
+            message = field.val();
+        if( message == '' ) {
+          alert('Say what?');
+          field.focus();
+          return false;
+        }
+        socket.send(message);
+        field.val('');
+        field.focus();
+        return false;
+      });
+    })
+  </script>
+<% end %>
+
+<ul id="messages" class="rounded">
+  
+</ul>
+
+<fieldset>
+  <form id="post">    
+    <input type="text" size="60" name="message" placeholder="Say something" />
+    <input type="submit" value="say it" />
+  </form>
+</fieldset>
