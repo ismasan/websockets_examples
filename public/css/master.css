@@ -1,0 +1,35 @@
+body, html, table, form, ul, ol, li, dt, dd, dl {
+  padding:0;
+  margin:0;
+}
+
+body {
+  font-family: 'Lucida Grande', helvetica, sans-serif;
+  font-size: 12px;
+  text-align: center;
+  background: #123;
+}
+.rounded {
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+.shadowed {
+  -webkit-box-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+  -moz-box-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+#wrapper {
+  text-align: left;
+  margin:0 auto;
+  width: 80%;
+  padding-top: 20px;
+}
+#main {
+  border: solid silver 10px;
+  background: #eee;
+}
+h1 {
+  padding: 0 20px;
+}
+#primary {
+  padding: 20px;
+}

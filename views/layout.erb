@@ -1,0 +1,23 @@
+<!DOCTYPE HTML> 
+<html lang="en"> 
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/master.css" type="text/css" media="screen" title="no title" charset="utf-8">
+  <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+  <% yield_content :head %>
+</head>
+<body>
+  
+  <div id="wrapper">
+    
+    <div id="main" class="rounded shadowed">
+      <h1><%= title %></h1>
+      <div id="primary">
+        <%= yield %>
+      </div>
+    </div>
+    
+  </div>
+  
+</body>
+</html>
