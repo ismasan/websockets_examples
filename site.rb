@@ -3,6 +3,7 @@ require "bundler/setup"
 
 require 'sinatra/base'
 require 'sinatra/content_for'
+require 'config'
 
 class Site < Sinatra::Base
   

@@ -2,6 +2,7 @@ require 'rubygems'
 require "bundler/setup"
 
 require 'em-websocket'
+require File.dirname(__FILE__) + '/../config'
 
 class Channel
   
@@ -28,7 +29,7 @@ EventMachine.run {
   
   @channel = Channel.new
   
-  EventMachine::WebSocket.start(:host => "0.0.0.0", :port => 8080, :debug => true) do |socket|
+  EventMachine::WebSocket.start(:host => IP, :port => 8080, :debug => true) do |socket|
     socket.onopen {
       @channel.subscribe socket
       @channel.send_message 'User connected'
