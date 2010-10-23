@@ -6,7 +6,9 @@
       
       $('#status').text('connecting...');
       
-      // Listen to socket messages
+      /* -----------------------------------------------------
+      Listen to socket messages
+      -------------------------------------------------------*/
       
       socket.onopen = function() {
         $('#status').removeClass('disconnected').addClass('connected').text('connected');
@@ -26,7 +28,10 @@
         li.highlightFade({start: '#0D4512', end: '#000000'});
       }
       
-      // Send messages to socket
+      /* ---------------------------------------------------
+      Send messages to socket
+      -----------------------------------------------------*/
+      
       $('#post').submit(function () {
         var field = $(this).find('[name=message]'),
             message = field.val();
