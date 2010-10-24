@@ -7,7 +7,7 @@ require 'config'
 
 class Site < Sinatra::Base
   
-  enable  :static
+  enable  :static, :sessions
   set     :root, File.dirname(__FILE__)
   set     :public, Proc.new { File.join(root, "public") }
   
@@ -18,6 +18,10 @@ class Site < Sinatra::Base
       @title = t if t
       @title
     end
+  end
+  
+  before do
+    session[:user_id] ||= Time.now.to_i
   end
   
   get '/?' do

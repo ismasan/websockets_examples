@@ -1,0 +1,157 @@
+<% content_for :head do %>
+  <script type="text/javascript" charset="utf-8" src="/js/fancy-websocket.js"></script>
+  <script type="text/javascript" charset="utf-8" src="/js/underscore.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    var Path, Canvas;
+    
+    $(function(){
+      
+      var socket = new FancyWebSocket('ws://<%= IP %>:8080');
+      
+      var colors = ['#97E274', '#EDE618', '#14D8F5','#F11DF6','#A2E914'],
+          local_color = colors[Math.round(Math.random() * colors.length -1)];
+      
+      $('#status').text('connecting...');
+      
+      /* -----------------------------------------------------
+      Path object
+      -------------------------------------------------------*/
+      Path = function (id, color) {
+
+        this.id = id;
+        this.color = color || local_color;
+        this.points = [];
+        this.add = function (point) {
+          this.points.push(point);
+          return this;
+        }
+        this.hasPoints = function () {
+          return this.points.length > 0;
+        }
+      };
+      
+      // Class methods
+      $.extend(Path, {
+        paths: [],
+        
+        findOrCreate: function (id, color) {
+          var p;
+          if( p = Path.find(id) ) return p;
+          p = new Path(id, color);
+          Path.paths.push(p);
+          return p;
+        },
+        
+        create: function () {
+          var next_id = '<%= session[:user_id] %>_' + new Date().getTime(); ;
+          var p = new Path(next_id);
+          Path.paths.push(p);
+          return p;
+        },
+        
+        each: function (iterator) {
+          _.each(Path.paths, iterator);
+          return Path;
+        },
+
+        find: function (id) {
+          return _.detect(Path.paths, function (path) {
+            return path.id == id;
+          });
+        },
+
+        first: function () {
+          return _.first(this.paths);
+        },
+        
+        last: function () {
+          return _.last(this.paths);
+        }
+      });
+      
+      /* -----------------------------------------------------
+      Canvas object
+      -------------------------------------------------------*/
+      Canvas = function ($canvas) {
+        var colors = ['#97E274', '#EDE618', '#14D8F5','#F11DF6','#A2E914'];
+        var ctx = $canvas.get(0).getContext('2d');
+        ctx.lineWidth = 1;
+        ctx.lineCap = 'round';
+        
+        function point (p) {
+          return [
+            p[0] - $canvas.offset().left,
+            p[1] - $canvas.offset().top
+          ];
+        }
+        
+        this.clear = function () {
+          ctx.clearRect(0,0,$canvas.width(),$canvas.height()); 
+        }
+        
+        this.draw = function (path) {
+          ctx.strokeStyle = path.color;
+          ctx.beginPath();
+          var first = point(path.points[0]);
+          ctx.moveTo(first[0],first[1]);
+          var points = _.rest(path.points, 1);
+          _.each(points, function (p) {
+            p = point(p);
+            ctx.lineTo(p[0],p[1]);  
+          });
+          ctx.stroke();
+        }
+      }
+      /* -----------------------------------------------------
+      Listen to socket messages
+      -------------------------------------------------------*/
+      var drawing = false,
+          local_path,
+          canvas = new Canvas($('#canvas'));
+      
+      socket.bind('open', function () {
+        $('#status').removeClass('disconnected').addClass('connected').text('connected');
+      });
+      
+      socket.bind('close', function () {
+        $('#status').removeClass('connected').addClass('disconnected').text('disconnected');
+      });
+      
+      socket.bind('mousemove', function (move) {
+        if(local_path && local_path.id == move.id) return;
+        var path = Path.findOrCreate(move.id, move.color);
+        path.add(move.point);
+      });
+      
+      /* ---------------------------------------------------
+      Send messages to socket
+      -----------------------------------------------------*/
+      
+      $('#canvas').mousedown(function () {
+        drawing = true;
+        local_path = Path.create();
+      })
+      .mouseup(function () {
+        drawing = false;
+        // end path
+      })
+      .mousemove(function (evt) {
+        if(drawing) {
+          var point = [evt.pageX, evt.pageY];
+          local_path.add(point);
+          socket.send('mousemove', {id: local_path.id, color: local_path.color, point: [evt.pageX, evt.pageY]});
+        }
+      });
+      
+      setInterval(function () {
+        canvas.clear();
+         Path.each(function (path) {
+           if(path.hasPoints())
+             canvas.draw(path);
+         })
+       }, 50);
+    });
+  </script>
+<% end %>
+
+<canvas id="canvas" width="800" height="350" class="rounded"></canvas>
