@@ -32,7 +32,6 @@ EventMachine.run {
   EventMachine::WebSocket.start(:host => IP, :port => 8080, :debug => true) do |socket|
     socket.onopen {
       @channel.subscribe socket
-      @channel.send_message 'User connected'
     }
     socket.onmessage { |msg|
       @channel.send_message msg
