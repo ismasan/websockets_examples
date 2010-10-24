@@ -39,7 +39,6 @@ var FancyWebSocket = function(url){
   conn.onopen = function(){dispatch('open',null)}
 
   var dispatch = function(event_name, message){
-    console.log(event_name, message)
     var chain = callbacks[event_name];
     if(typeof chain == 'undefined') return; // no callbacks for this event
     for(var i = 0; i < chain.length; i++){
