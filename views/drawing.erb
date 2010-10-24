@@ -17,17 +17,33 @@
       Path object
       -------------------------------------------------------*/
       Path = function (id, color) {
-
+        
+        var buffer_index = 0,
+            buffer = [],
+            last_buffer_sent = new Date(),
+            buffer_delay = 100;
+            
         this.id = id;
         this.color = color || local_color;
         this.points = [];
+        
         this.add = function (point) {
           this.points.push(point);
+          buffer.push(point);
           return this;
         }
         this.hasPoints = function () {
           return this.points.length > 0;
         }
+        
+        // Optimization: send buffered points every 100 milliseconds
+        this.bufferedPoints = function (callback) {
+          if (last_buffer_sent < new Date() - buffer_delay) {
+            last_buffer_sent = new Date();
+            callback(buffer);
+            buffer = [];
+          }
+        };
       };
       
       // Class methods
@@ -117,10 +133,14 @@
         $('#status').removeClass('connected').addClass('disconnected').text('disconnected');
       });
       
+      // Mouse moves are buffered for efficiency. Here we get an array of moves.
       socket.bind('mousemove', function (move) {
+        console.log(move)
         if(local_path && local_path.id == move.id) return;
         var path = Path.findOrCreate(move.id, move.color);
-        path.add(move.point);
+        _.each(move.points, function (point) {
+          path.add(point);
+        })
       });
       
       /* ---------------------------------------------------
@@ -139,7 +159,9 @@
         if(drawing) {
           var point = [evt.pageX, evt.pageY];
           local_path.add(point);
-          socket.send('mousemove', {id: local_path.id, color: local_path.color, point: [evt.pageX, evt.pageY]});
+          local_path.bufferedPoints(function (points) {            
+            socket.send('mousemove', {id: local_path.id, color: local_path.color, points: points});
+          });
         }
       });
       
