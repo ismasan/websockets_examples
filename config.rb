@@ -1,1 +1,1 @@
-IP = 'localhost'
+IP = 'ismasan.local'
