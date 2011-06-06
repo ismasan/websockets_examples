@@ -6,12 +6,12 @@ Socket servers are in sockets/. There's a Sinatra site with pages that listen to
 
 Start one or more socket server examples.
 
-    ruby sockets/basic_chat.rb
+    ruby sockets/multicast.rb
     
 
 Start the site:
 
-    rackup -p 3000
+    bundle exec rackup -p 3000
     
 Navigate to localhost:3000. You should see an index of available examples.
 

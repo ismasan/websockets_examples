@@ -2,7 +2,10 @@ require 'rubygems'
 require "bundler/setup"
 
 require 'em-websocket'
-require File.dirname(__FILE__) + '/../config'
+
+$LOAD_PATH.unshift(File.dirname(File.expand_path(__FILE__)) + '/../' )
+
+require 'config'
 
 class Channel
   
@@ -31,13 +34,18 @@ EventMachine.run {
   
   EventMachine::WebSocket.start(:host => IP, :port => 8080, :debug => true) do |socket|
     socket.onopen {
+      puts 'Socket connected'
       @channel.subscribe socket
     }
     socket.onmessage { |msg|
       @channel.send_message msg
     }
     socket.onclose {
+      puts 'Socket closed'
       @channel.unsubscribe socket
+    }
+    socket.onerror {
+      puts 'ERRORRRRR'
     }
   end
   
