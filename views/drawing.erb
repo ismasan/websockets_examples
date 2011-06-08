@@ -6,7 +6,7 @@
     
     $(function(){
       
-      var socket = new FancyWebSocket('ws://<%= IP %>:8080');
+      var socket = new FancyWebSocket('ws://<%= IP %>:8080/<%= @channel_name %>');
       
       var colors = ['#97E274', '#EDE618', '#14D8F5','#F11DF6','#A2E914', '#DCD427', '#EC17BE'],
           local_color = colors[Math.ceil(Math.random() * colors.length -1)];

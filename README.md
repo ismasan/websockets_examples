@@ -13,6 +13,11 @@ Start the site:
 
     bundle exec rackup -p 3000
     
+    
+Channels
+
+    ws://localhost:8080/channel_name_here
+    
 Navigate to localhost:3000. You should see an index of available examples.
 
 ## Installation

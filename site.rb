@@ -29,7 +29,8 @@ class Site < Sinatra::Base
     erb :index
   end
   
-  get '/:example_name' do |example_name|
+  get '/:channel_name/:example_name' do |channel_name, example_name|
+    @channel_name = channel_name
     title example_name
     erb example_name.to_sym
   end
