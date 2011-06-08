@@ -9,6 +9,16 @@ require 'config'
 
 class Channel
   
+  class << self
+    
+    def get(key)
+      @channels ||= {}
+      @channels[key] ||= new
+      @channels[key]
+    end
+    
+  end
+  
   def initialize
     @sockets = []
   end
@@ -33,16 +43,17 @@ EventMachine.run {
   @channel = Channel.new
   
   EventMachine::WebSocket.start(:host => IP, :port => 8080, :debug => true) do |socket|
-    socket.onopen {
+    socket.onopen {|*args|
       puts 'Socket connected'
-      @channel.subscribe socket
+      Channel.get(socket.request['path']).subscribe socket
     }
     socket.onmessage { |msg|
-      @channel.send_message msg
+      puts socket.request['path'].inspect
+      Channel.get(socket.request['path']).send_message msg
     }
     socket.onclose {
       puts 'Socket closed'
-      @channel.unsubscribe socket
+      Channel.get(socket.request['path']).unsubscribe socket
     }
     socket.onerror {
       puts 'ERRORRRRR'
