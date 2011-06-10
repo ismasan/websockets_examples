@@ -90,3 +90,46 @@ input[type=text] {
 #canvas {
   background: black;
 }
+
+/* Pinboard
+--------------------------------*/
+#images{
+  margin: 5px;
+  border: 1px solid black;
+/*  width: 968px;*/
+  background: white;
+}
+
+#images img {
+  float: left;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 10px;
+  height: 200px;
+  width: 200px;
+}
+
+/* Hacks 
+--------------------------------*/
+
+/* Clearfix */
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}
