@@ -6,6 +6,10 @@
   <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
   <script type="text/javascript" charset="utf-8" src="/js/jquery.highlight.js"></script>
   <script type="text/javascript" charset="utf-8">
+    
+    var WS_URI = 'ws://<%= IP %>:8080/<%= @channel_name %>';
+    
+    // Shared socket status
     function socketStatus(socket) {
       socket.onopen = function() {
         $('#status').removeClass('disconnected').addClass('connected').text('connected');

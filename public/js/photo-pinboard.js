@@ -44,7 +44,7 @@ document.addEventListener("load", function(evt){
   $('#clear').click(clearAll);
   
   var storageReader = new LocalReader();
-  socket = new WebSocket("ws://eyas.local:8080/foo");
+  socket = new WebSocket(WS_URI);
   
   socketStatus(socket);
   

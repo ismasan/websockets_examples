@@ -2,7 +2,7 @@
   <script type="text/javascript" charset="utf-8">
     $(function(){
       
-      var socket = new WebSocket('ws://<%= IP %>:8080/<%= @channel_name %>');
+      var socket = new WebSocket(WS_URI);
       
       $('#status').text('connecting...');
       
