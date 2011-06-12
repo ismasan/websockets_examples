@@ -94,10 +94,6 @@ input[type=text] {
 /* Pinboard
 --------------------------------*/
 #images{
-  margin: 5px;
-  border: 1px solid black;
-/*  width: 968px;*/
-  background: white;
 }
 
 #images img {
@@ -107,6 +103,8 @@ input[type=text] {
   margin: 10px;
   height: 200px;
   width: 200px;
+  background: white;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
 }
 
 /* Hacks 
