@@ -1,1 +1,1 @@
-IP = 'ismasan.local'
+IP = `hostname`.strip
