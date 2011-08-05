@@ -1,7 +1,7 @@
-/* Ismael Celis 2010
+/* 
 Simplified WebSocket events dispatcher (no channels, no users)
 
-var socket = new FancyWebSocket();
+var socket = new FancyWebSocket('ws://someserver.com');
 
 // bind to server events
 socket.bind('some_event', function(data){
